@@ -1,6 +1,8 @@
 import MainMenu from "./MainMenu"
+import React from "react"
 
 const TributeCreator = (props) => {
+
     return (
         <>
         <div>TributeCreator.js</div>
