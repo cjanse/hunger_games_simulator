@@ -3,22 +3,17 @@ import styles from '../styles/Home.module.css'
 import React from "react"
 import MainMenu from "../components/MainMenu"
 import GameScreen from "../components/GameScreen"
-import Game from "../components/Game"
 
 export default function Home() {
 
   const [simulating, setSimulating] = React.useState(false);
   const start = () => {
-    console.log("createMap Function")
-    game1.createMap();
     setSimulating(true);
   }
 
-  const game1 = new Game;
-
   return (
     <div>
-      {simulating ? (<GameScreen game1={game1}/>)
+      {simulating ? (<GameScreen/>)
       : (
         <MainMenu start={start}/>
       )}

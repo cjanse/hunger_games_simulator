@@ -11,5 +11,9 @@ class MapElement{
     getMessage(){
         return this.message;
     }
+
+    setMessage(message){
+        this.message = message;
+    }
 }
 export default MapElement;
