@@ -6,10 +6,18 @@ class Tribute {
         this.column = column;
     }
 
-    directionMove(positiveOnly){
-        if (positiveOnly){
+    directionMove(range){
+        if (range == 1){
             if (Math.random() > 0.5){
                 return 1;
+            }
+            else {
+                return 0;
+            }
+        }
+        else if (range == -1){
+            if (Math.random() > 0.5){
+                return -1;
             }
             else {
                 return 0;
@@ -53,16 +61,22 @@ class Tribute {
    
     move(){
         if (this.row == 0){
-            this.row += this.directionMove(true);
+            this.row += this.directionMove(1);
+        }
+        else if (this.row == 10){
+            this.row += this.directionMove(-1);
         }
         else {
-            this.row += this.directionMove(false);
+            this.row += this.directionMove(0);
         }
         if (this.column == 0){
-            this.column += this.directionMove(true);
+            this.column += this.directionMove(1);
+        }
+        else if (this.column == 10){
+            this.column += this.directionMove(-1);
         }
         else {
-            this.column += this.directionMove(false);
+            this.column += this.directionMove(0);
         }
     }
 

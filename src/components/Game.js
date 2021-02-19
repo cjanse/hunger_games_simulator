@@ -60,7 +60,8 @@ class Game {
         }
         else {
             this.tributeIndex = 0;
-            this.message = "Finished day";
+            this.day++;
+            this.message = "Finished day " + this.day;
         }
         console.log(this.tributeIndex);
         console.log("Do something");
