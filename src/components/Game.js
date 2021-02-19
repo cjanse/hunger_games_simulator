@@ -118,5 +118,9 @@ class Game {
     getMessage(){
         return this.message;
     }
+
+    getTributesLength(){
+        return this.tributes.length;
+    }
 }
 export default Game;

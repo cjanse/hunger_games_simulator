@@ -12,11 +12,16 @@ export default function Home() {
     setSimulating(true);
   }
 
+  function stop(){
+    console.log("stop")
+    setSimulating(false);
+  }
+
   var game1 = new Game();
 
   return (
     <div>
-      {simulating ? (<GameScreen game1={game1}/>)
+      {simulating ? (<GameScreen game1={game1} stop={stop}/>)
       : (
         <MainMenu start={start}/>
       )}
