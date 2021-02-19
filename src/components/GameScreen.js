@@ -10,7 +10,6 @@ const GameScreen = (props) => {
     function accessContinueGame(){ 
         isUpdating(!updating);
         props.game1.continueGame();
-        console.log("AccessContinueGame");
         }
 
     return (

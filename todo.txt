@@ -1,0 +1,16 @@
+TODO:
+
+(! signifies completion)
+
+!Create basic map (11 x 11)
+!allow tributes to move
+allow tributes to die from environmental factors
+ALlow tributes to kill each other
+Design win screen
+Design nicer map
+Add weapons, supplies, etc on map
+Give tribute more complex stats (hunger, thirst, strength, aggressiveness, etc.)
+More regulation on how tributes can move on map (can't go across water w/o boat)
+Enable tribute creator
+Design better homescreen
+deploy??

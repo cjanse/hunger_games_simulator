@@ -8,7 +8,7 @@ class Game {
         this.tributes = [];
         this.day = 0;
         this.tributeIndex = 0;
-        this.message = "MESSAGE";
+        this.message = "AND MAY THE ODDS BE EVER IN YOUR FAVOR";
 
         //making tribute list
         this.tributes.push(new Tribute("Carter",4,4));
@@ -46,25 +46,25 @@ class Game {
         }
     }
 
+    moveTribute() {
+        this.map[this.tributes[this.tributeIndex].getRow()][this.tributes[this.tributeIndex].getColumn()].removeTributeName(this.tributes[this.tributeIndex].getMapName());
+        console.log("Tribute: " + this.tributes[this.tributeIndex].getMapName() + "\t position: " + this.tributes[this.tributeIndex].getRow() + "," + this.tributes[this.tributeIndex].getColumn());
+        this.tributes[this.tributeIndex].move();
+        console.log("Tribute: " + this.tributes[this.tributeIndex].getMapName() + "\t position: " + this.tributes[this.tributeIndex].getRow() + "," + this.tributes[this.tributeIndex].getColumn());
+        this.map[this.tributes[this.tributeIndex].getRow()][this.tributes[this.tributeIndex].getColumn()].addTributeName(this.tributes[this.tributeIndex].getMapName());  
+        this.message ="Tribute: " + this.tributes[this.tributeIndex].getName() + "\t position: " + this.tributes[this.tributeIndex].getRow() + "," + this.tributes[this.tributeIndex].getColumn();
+    }
+
     continueGame() {
-        console.log(this.tributeIndex);
         if (this.tributeIndex < this.tributes.length){
-            this.map[this.tributes[this.tributeIndex].getRow()][this.tributes[this.tributeIndex].getColumn()].removeTributeName(this.tributes[this.tributeIndex].getMapName());
-            console.log("Tribute: " + this.tributes[this.tributeIndex].getMapName() + "\t position: " + this.tributes[this.tributeIndex].getRow() + "," + this.tributes[this.tributeIndex].getColumn());
-            this.tributes[this.tributeIndex].move();
-            console.log("Tribute: " + this.tributes[this.tributeIndex].getMapName() + "\t position: " + this.tributes[this.tributeIndex].getRow() + "," + this.tributes[this.tributeIndex].getColumn());
-            this.map[this.tributes[this.tributeIndex].getRow()][this.tributes[this.tributeIndex].getColumn()].addTributeName(this.tributes[this.tributeIndex].getMapName());
+            this.moveTribute();
             this.tributeIndex++;
-            //console.log(this.tributeIndex);
-            this.message ="Tribute: " + this.tributes[this.tributeIndex - 1].getName() + "\t position: " + this.tributes[this.tributeIndex - 1].getRow() + "," + this.tributes[this.tributeIndex - 1].getColumn();
         }
         else {
             this.tributeIndex = 0;
             this.day++;
             this.message = "Finished day " + this.day;
         }
-        console.log(this.tributeIndex);
-        console.log("Do something");
     }
 
     getMapElement(row, column){
