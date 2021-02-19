@@ -4,6 +4,8 @@ import Game from "../components/Game"
 import React from "react"
 
 const GameScreen = (props) => {
+
+    const [hasWon, sethasWon] = React.useState(false);
     
     const [updating, isUpdating] = React.useState(false);
 
@@ -17,7 +19,7 @@ const GameScreen = (props) => {
         <div className = "bg-gray-400 flex flex-col flex-center justify-center h-screen">
         <div className = "flex flex-col text-center items-center">
         <div>
-        {updating ? (<OtherMapScreen game1={props.game1}/>) //error with moving tributes... possibly because MapScreen does not update after every turn... also, this.tributeIndex is also not updating... 
+        {updating ? (<OtherMapScreen game1={props.game1}/>)  
       : (
         <MapScreen game1={props.game1}/>
       )}

@@ -4,6 +4,7 @@ class Tribute {
         this.name = name;
         this.row = row;
         this.column = column;
+        this.isAlive = true;
     }
 
     directionMove(range){
@@ -48,6 +49,14 @@ class Tribute {
 
     getName(){
         return this.name;
+    }
+
+    setIsAlive(value){
+        this.isAlive = value;
+    }
+
+    getIsAlive(){
+        return this.isAlive;
     }
 
     getMapName(){

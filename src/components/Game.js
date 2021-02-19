@@ -9,6 +9,8 @@ class Game {
         this.day = 0;
         this.tributeIndex = 0;
         this.message = "AND MAY THE ODDS BE EVER IN YOUR FAVOR";
+        this.inSurvival = false;
+        this.inBattle = false;
 
         //making tribute list
         this.tributes.push(new Tribute("Carter",4,4));
@@ -53,15 +55,57 @@ class Game {
         console.log("Tribute: " + this.tributes[this.tributeIndex].getMapName() + "\t position: " + this.tributes[this.tributeIndex].getRow() + "," + this.tributes[this.tributeIndex].getColumn());
         this.map[this.tributes[this.tributeIndex].getRow()][this.tributes[this.tributeIndex].getColumn()].addTributeName(this.tributes[this.tributeIndex].getMapName());  
         this.message ="Tribute: " + this.tributes[this.tributeIndex].getName() + "\t position: " + this.tributes[this.tributeIndex].getRow() + "," + this.tributes[this.tributeIndex].getColumn();
+        this.inSurvival = true;
+    }
+
+    tributeEnviroSurvival(){
+        if (Math.random() < 0.2){
+            this.tributes[this.tributeIndex].setIsAlive(false);
+            console.log(this.tributes[this.tributeIndex].getIsAlive());
+            this.message ="Tribute: " + this.tributes[this.tributeIndex].getName() + " has tragically died from environmental factors.";
+            this.map[this.tributes[this.tributeIndex].getRow()][this.tributes[this.tributeIndex].getColumn()].removeTributeName(this.tributes[this.tributeIndex].getMapName());
+        }
+        else {
+            this.message ="Tribute: " + this.tributes[this.tributeIndex].getName() + " is living the best life.";
+        }
+        this.inSurvival = false;
+    }
+
+    removeDeadTributes() {
+        var i;
+        var tempTribute;
+        if (this.tributes.length == 0) {
+            return;
+        }
+        var initialLength = this.tributes.length;
+        for (i = 0; i < initialLength; i++){
+            tempTribute = this.tributes.shift();
+            if (tempTribute.getIsAlive()){
+                this.tributes.push(tempTribute);
+            }
+        }
     }
 
     continueGame() {
         if (this.tributeIndex < this.tributes.length){
-            this.moveTribute();
-            this.tributeIndex++;
+            console.log(this.tributes[this.tributeIndex].getIsAlive());
+            if (this.tributes[this.tributeIndex].getIsAlive() == false){
+                this.tributeIndex++;
+                this.continueGame();
+                return;
+            }
+            if (this.inSurvival){
+                this.tributeEnviroSurvival();
+                this.tributeIndex++;
+            }
+            else {
+                this.moveTribute();
+            }
+            
         }
         else {
             this.tributeIndex = 0;
+            this.removeDeadTributes();
             this.day++;
             this.message = "Finished day " + this.day;
         }
