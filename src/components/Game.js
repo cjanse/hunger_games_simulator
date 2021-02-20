@@ -59,16 +59,53 @@ class Game {
     }
 
     tributeEnviroSurvival(){
-        if (Math.random() < 0.2){
+        if (Math.random() < 0.2){ 
             this.tributes[this.tributeIndex].setIsAlive(false);
             console.log(this.tributes[this.tributeIndex].getIsAlive());
             this.message ="Tribute: " + this.tributes[this.tributeIndex].getName() + " has tragically died from environmental factors.";
             this.map[this.tributes[this.tributeIndex].getRow()][this.tributes[this.tributeIndex].getColumn()].removeTributeName(this.tributes[this.tributeIndex].getMapName());
+            this.tributeIndex++;
         }
         else {
             this.message ="Tribute: " + this.tributes[this.tributeIndex].getName() + " is living the best life.";
+            this.inBattle = true;
         }
         this.inSurvival = false;
+    }
+
+    findTribute(name){
+        var i;
+        console.log(this.tributes.length);
+        for (i = 0; i < this.tributes.length; i++){
+            if (this.tributes[i].getMapName() == name){
+                console.log("found Match!")
+                return this.tributes[i];
+            }
+        }
+    }
+
+    tributeBattle(){
+        var otherTributeName = this.map[this.tributes[this.tributeIndex].getRow()][this.tributes[this.tributeIndex].getColumn()].findAnotherTributeName(this.tributes[this.tributeIndex].getMapName());
+        if (otherTributeName == ""){
+            this.message ="Tribute: " + this.tributes[this.tributeIndex].getName() + " does not see anyone to kill.";
+            this.inBattle = false;
+            return;
+        }
+        else {
+            var otherTribute = this.findTribute(otherTributeName);
+            if (Math.random() > 0.5){
+                otherTribute.setIsAlive(false);
+                this.map[this.tributes[this.tributeIndex].getRow()][this.tributes[this.tributeIndex].getColumn()].removeTributeName(otherTribute.getMapName());
+                this.message = this.tributes[this.tributeIndex].getName() + " killed " + otherTribute.getName();
+            }
+            else {
+                this.tributes[this.tributeIndex].setIsAlive(false);
+                this.map[this.tributes[this.tributeIndex].getRow()][this.tributes[this.tributeIndex].getColumn()].removeTributeName(this.tributes[this.tributeIndex].getMapName());
+                this.message = otherTribute.getName() + " killed " + this.tributes[this.tributeIndex].getName();
+            }
+        }
+        this.inBattle = false;
+
     }
 
     removeDeadTributes() {
@@ -96,6 +133,9 @@ class Game {
             }
             if (this.inSurvival){
                 this.tributeEnviroSurvival();
+            }
+            else if (this.inBattle){
+                this.tributeBattle();
                 this.tributeIndex++;
             }
             else {
@@ -121,6 +161,17 @@ class Game {
 
     getTributesLength(){
         return this.tributes.length;
+    }
+
+    getGameOverMessage(){
+        var gameOverMessage = "";
+        if (this.tributes.length == 1){
+            gameOverMessage += this.tributes[0].getName() + " is the winner!"
+        }
+        else {
+            gameOverMessage += "There is no winner.";
+        }
+        return gameOverMessage;
     }
 }
 export default Game;

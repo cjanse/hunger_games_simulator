@@ -1,6 +1,5 @@
 import MapScreen from "./MapScreen"
 import OtherMapScreen from "./OtherMapScreen"
-import Game from "../components/Game"
 import React from "react"
 import EndGame from "./EndGame"
 
@@ -18,13 +17,14 @@ const GameScreen = (props) => {
       }
     }
     
+    
 
     return (
         <>
         <div className = "bg-gray-400 flex flex-col flex-center justify-center h-screen">
         <div className = "flex flex-col text-center items-center">
         <div>
-        {hasWon ? (<EndGame stop={props.stop}/>)
+        {hasWon ? (<EndGame stop={props.stop} game1={props.game1}/>)
         : (
         <div>
         {updating ? (<OtherMapScreen game1={props.game1}/>)  
