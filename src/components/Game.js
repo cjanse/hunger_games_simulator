@@ -18,6 +18,9 @@ class Game {
         this.tributes.push(new Tribute("Ashley",4,6));
         this.tributes.push(new Tribute("Salonee",5,6));
         this.tributes.push(new Tribute("Christopher",6,6));
+        this.tributes.push(new Tribute("Snowball",6,5));
+        this.tributes.push(new Tribute("Pounce",6,4));
+        this.tributes.push(new Tribute("Bella",5,4));
 
         this.createMap();
         this.placeTributes();
