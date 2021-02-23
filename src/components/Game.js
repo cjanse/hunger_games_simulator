@@ -2,6 +2,7 @@ import MapElement from "./MapElement"
 import Tribute from "./Tribute"
 
 class Game {
+    
     constructor(){
         console.log("Constructor");
         this.map = [];
@@ -13,19 +14,20 @@ class Game {
         this.inBattle = false;
 
         //making tribute list
-        this.tributes.push(new Tribute("Carter",4,4));
-        this.tributes.push(new Tribute("Skylar",4,5));
-        this.tributes.push(new Tribute("Ashley",4,6));
-        this.tributes.push(new Tribute("Salonee",5,6));
-        this.tributes.push(new Tribute("Christopher",6,6));
-        this.tributes.push(new Tribute("Snowball",6,5));
-        this.tributes.push(new Tribute("Pounce",6,4));
-        this.tributes.push(new Tribute("Bella",5,4));
+        this.tributes.push(new Tribute("Carter"));
+        this.tributes.push(new Tribute("Skylar"));
+        this.tributes.push(new Tribute("Ashley"));
+        this.tributes.push(new Tribute("Salonee"));
+        this.tributes.push(new Tribute("Christopher"));
+        this.tributes.push(new Tribute("Snowball"));
+        this.tributes.push(new Tribute("Pounce"));
+        this.tributes.push(new Tribute("Bella"));
 
         this.createMap();
         this.placeTributes();
         
     }
+
 
     createMap() {
         var i;
@@ -45,6 +47,34 @@ class Game {
     }
 
     placeTributes() {
+        //establishes tribute's initial positions
+        var i;
+        var x = 4;
+        var y = 4;
+        for (i = 0; i <this.tributes.length; i++){
+            if (x == 4 && y < 6){
+                this.tributes[i].setRow(x);
+                this.tributes[i].setColumn(y);
+                y++;
+            }
+            else if (x < 6 && y == 6){
+                this.tributes[i].setRow(x);
+                this.tributes[i].setColumn(y);
+                x++;
+            }
+            else if (x == 6 && y > 4){
+                this.tributes[i].setRow(x);
+                this.tributes[i].setColumn(y);
+                y--;
+            }
+            else {
+                this.tributes[i].setRow(x);
+                this.tributes[i].setColumn(y);
+                x--;
+            }
+        }
+
+        //places tributes on map
         var i;
         for (i = 0; i < this.tributes.length; i++){
             this.map[this.tributes[i].getRow()][this.tributes[i].getColumn()].addTributeName(this.tributes[i].getMapName());
@@ -166,6 +196,7 @@ class Game {
         return this.tributes.length;
     }
 
+    
     getGameOverMessage(){
         var gameOverMessage = "";
         if (this.tributes.length == 1){

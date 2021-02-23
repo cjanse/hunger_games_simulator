@@ -1,9 +1,9 @@
 
 class Tribute {
-    constructor(name, row, column){
+    constructor(name){
         this.name = name;
-        this.row = row;
-        this.column = column;
+        this.row = -1;
+        this.column = -1;
         this.isAlive = true;
     }
 
@@ -37,6 +37,14 @@ class Tribute {
             }
 
         }
+    }
+
+    setRow(value){
+        this.row = value;
+    }
+
+    setColumn(value){
+        this.column = value;
     }
 
     getRow(){
