@@ -1,8 +1,10 @@
 import MapElement from "./MapElement"
 import Tribute from "./Tribute"
 
+const GAME_LENGTH = 11;
+
 class Game {
-    
+
     constructor(){
         console.log("Constructor");
         this.map = [];
@@ -32,14 +34,14 @@ class Game {
     createMap() {
         var i;
         var j;
-        for (i = 0; i < 11; i++){
+        for (i = 0; i < GAME_LENGTH; i++){
             let temp = [];
-            for (j = 0; j < 11; j++){
+            for (j = 0; j < GAME_LENGTH; j++){
                 if (i == 5 && j == 5){
-                    temp.push(new MapElement("w-16 h-16 box-border border-2 flex justify-center place-items-center text-xs bg-gray-500"));
+                    temp.push(new MapElement(0));
                 } 
                 else {
-                    temp.push(new MapElement("w-16 h-16 box-border border-2 flex justify-center place-items-center bg-green-500"));
+                    temp.push(new MapElement(1));
                 }
             }
             this.map.push(temp);

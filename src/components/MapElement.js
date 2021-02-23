@@ -1,7 +1,8 @@
 class MapElement{
 
     constructor(format){
-        this.format = format;
+        this.terrainFormats = ["w-16 h-16 box-border border-2 flex justify-center place-items-center text-xs bg-gray-500","w-16 h-16 box-border border-2 flex justify-center place-items-center bg-green-500"]
+        this.format = this.terrainFormats[format];
         this.tributeNames = [];
     }
 
