@@ -25,13 +25,13 @@ class Game {
         this.tributes.push(new Tribute("Pounce"));
         this.tributes.push(new Tribute("Bella"));
 
-        this.createMap();
+        this.createMap(0);
         this.placeTributes();
         
     }
 
 
-    createMap() {
+    createMap(mapChoice) {
         var i;
         var j;
         for (i = 0; i < GAME_LENGTH; i++){
@@ -45,6 +45,45 @@ class Game {
                 }
             }
             this.map.push(temp);
+        }
+
+        if (mapChoice == 0){
+            //adds house to map
+            this.map[0][1] = new MapElement(6);
+            this.map[1][1] = new MapElement(6);
+            this.map[2][1] = new MapElement(6);
+            this.map[2][3] = new MapElement(6);
+            this.map[2][3] = new MapElement(6);
+            this.map[1][3] = new MapElement(7);
+            this.map[0][3] = new MapElement(8);
+            this.map[0][2] = new MapElement(9);
+            this.map[1][2] = new MapElement(9);
+            this.map[2][2] = new MapElement(10);
+
+            //constructs park
+            this.map[7][1] = new MapElement(11);
+            this.map[7][2] = new MapElement(11);
+            this.map[8][1] = new MapElement(11);
+            this.map[8][2] = new MapElement(11);
+            this.map[6][1] = new MapElement(12);
+            this.map[6][2] = new MapElement(12);
+            this.map[9][1] = new MapElement(3);
+            this.map[9][2] = new MapElement(3);
+            
+            //constructs pond
+            this.map[8][4] = new MapElement(2);
+            this.map[8][5] = new MapElement(2);
+            this.map[9][4] = new MapElement(2);
+            this.map[9][5] = new MapElement(2);
+
+            //constructs forest
+            var i;
+            var j;
+            for (i = 0; i < GAME_LENGTH; i++){
+                for (j = 7; j < GAME_LENGTH; j++){
+                    this.map[i][j] = new MapElement(4);
+                }
+            }
         }
     }
 
@@ -94,7 +133,7 @@ class Game {
     }
 
     tributeEnviroSurvival(){
-        if (Math.random() < 0.2){ 
+        if (Math.random() < 0.05){ 
             this.tributes[this.tributeIndex].setIsAlive(false);
             console.log(this.tributes[this.tributeIndex].getIsAlive());
             this.message ="Tribute: " + this.tributes[this.tributeIndex].getName() + " has tragically died from environmental factors.";

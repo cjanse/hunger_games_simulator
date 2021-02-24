@@ -1,8 +1,36 @@
 class MapElement{
 
+    /**
+     * terrainFormats:
+     *      0: cornucopia
+     *      1: grass
+     *      2: water
+     *      3: sand
+     *      4: forest
+     *      5: ice/snow
+     *      // 6 - 10 relate to rooms in a house
+     *      6: house ~ general room
+     *      7: house ~ kitchen/dining room
+     *      8: house ~ bathrom
+     *      9: house ~ bedroom
+     *      10: house ~ game room
+     *      // 11 - 12 relates to playground
+     *      11: playground ~ jungle gym
+     *      12: playground ~ swing 
+     */
     constructor(format){
-        this.terrainFormats = ["w-16 h-16 box-border border-2 flex justify-center place-items-center text-xs bg-gray-500","w-16 h-16 box-border border-2 flex justify-center place-items-center bg-green-500"]
-        this.format = this.terrainFormats[format];
+        this.terrainFormats = ["text-xs bg-gray-400","bg-green-500","bg-blue-700 text-white","bg-yellow-400","bg-green-800 text-white","bg-blue-200","bg-yellow-800 text-white","bg-gray-700 text-white"]
+        this.formatChoice;
+        if (format >= 6 && format <= 10){
+            this.formatChoice = 6;
+        }
+        else if (format >= 11){
+            this.formatChoice = 7;
+        }
+        else {
+            this.formatChoice = format;
+        }
+        this.format = "w-16 h-16 box-border border-2 flex justify-center place-items-center " + this.terrainFormats[this.formatChoice];
         this.tributeNames = [];
     }
 
