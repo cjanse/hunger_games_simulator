@@ -1,5 +1,6 @@
 import MapElement from "./MapElement"
 import Tribute from "./Tribute"
+import Messages from "./Messages"
 
 const GAME_LENGTH = 11;
 
@@ -14,6 +15,7 @@ class Game {
         this.message = "AND MAY THE ODDS BE EVER IN YOUR FAVOR";
         this.inSurvival = false;
         this.inBattle = false;
+        this.messages = new Messages();
 
         //making tribute list
         this.tributes.push(new Tribute("Carter"));
@@ -125,17 +127,57 @@ class Game {
     moveTribute() {
         this.map[this.tributes[this.tributeIndex].getRow()][this.tributes[this.tributeIndex].getColumn()].removeTributeName(this.tributes[this.tributeIndex].getMapName());
         console.log("Tribute: " + this.tributes[this.tributeIndex].getMapName() + "\t position: " + this.tributes[this.tributeIndex].getRow() + "," + this.tributes[this.tributeIndex].getColumn());
-        this.tributes[this.tributeIndex].move();
+        var target = this.findTarget();
+        if (target[0] == -1){      
+            this.tributes[this.tributeIndex].move();
+            this.tributes[this.tributeIndex].move();
+            this.tributes[this.tributeIndex].move();
+        }
+        else {
+            this.smartMoveTribute(target);
+        }
         console.log("Tribute: " + this.tributes[this.tributeIndex].getMapName() + "\t position: " + this.tributes[this.tributeIndex].getRow() + "," + this.tributes[this.tributeIndex].getColumn());
         this.map[this.tributes[this.tributeIndex].getRow()][this.tributes[this.tributeIndex].getColumn()].addTributeName(this.tributes[this.tributeIndex].getMapName());  
-        this.message ="Tribute: " + this.tributes[this.tributeIndex].getName() + "\t position: " + this.tributes[this.tributeIndex].getRow() + "," + this.tributes[this.tributeIndex].getColumn();
+        this.message = this.messages.getMoveMessage(this.tributes[this.tributeIndex],this.map);
         this.inSurvival = true;
+    }
+
+    smartMoveTribute(target){
+        var i;
+        var j;
+        var bestPlacement = [-1,-1];
+        var bestDistance = -1;
+        for (i = this.tributes[this.tributeIndex].getRow() - 3; i < this.tributes[this.tributeIndex].getRow() + 3; i++){
+            for (j = this.tributes[this.tributeIndex].getColumn() - 3; j < this.tributes[this.tributeIndex].getRow() + 3; j++){
+                if (i >= 0 && j >= 0 && i < GAME_LENGTH && j < GAME_LENGTH){
+                    if (bestDistance == -1 || bestDistance > Math.sqrt((i-target[0])*(i-target[0]) + (j-target[1])*(j-target[1]))){
+                        bestPlacement = [i,j];
+                        bestDistance = Math.sqrt((i-target[0])*(i-target[0]) + (j-target[1])*(j-target[1]));
+                    }
+                }
+            }
+        }
+        this.tributes[this.tributeIndex].setRow(bestPlacement[0]);
+        this.tributes[this.tributeIndex].setColumn(bestPlacement[1]);
+    }
+
+    findTarget(){
+        if (this.day == 0){
+            if (Math.random() < (2/3)){
+                return [5,5];
+            }
+            else {
+                return [-1,-1];
+            }
+        }
+        else {
+            return [-1,-1];
+        }
     }
 
     tributeEnviroSurvival(){
         if (Math.random() < 0.05){ 
             this.tributes[this.tributeIndex].setIsAlive(false);
-            console.log(this.tributes[this.tributeIndex].getIsAlive());
             this.message ="Tribute: " + this.tributes[this.tributeIndex].getName() + " has tragically died from environmental factors.";
             this.map[this.tributes[this.tributeIndex].getRow()][this.tributes[this.tributeIndex].getColumn()].removeTributeName(this.tributes[this.tributeIndex].getMapName());
             this.tributeIndex++;
@@ -149,10 +191,8 @@ class Game {
 
     findTribute(name){
         var i;
-        console.log(this.tributes.length);
         for (i = 0; i < this.tributes.length; i++){
             if (this.tributes[i].getMapName() == name){
-                console.log("found Match!")
                 return this.tributes[i];
             }
         }
@@ -199,7 +239,6 @@ class Game {
 
     continueGame() {
         if (this.tributeIndex < this.tributes.length){
-            console.log(this.tributes[this.tributeIndex].getIsAlive());
             if (this.tributes[this.tributeIndex].getIsAlive() == false){
                 this.tributeIndex++;
                 this.continueGame();

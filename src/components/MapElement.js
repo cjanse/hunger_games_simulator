@@ -20,6 +20,7 @@ class MapElement{
      */
     constructor(format){
         this.terrainFormats = ["text-xs bg-gray-400","bg-green-500","bg-blue-700 text-white","bg-yellow-400","bg-green-800 text-white","bg-blue-200","bg-yellow-800 text-white","bg-gray-700 text-white"]
+        this.locations = ["cornucopia", "grass", "water", "sand", "forest", "snow", "house", "kitchen", "bathroom", "bedroom", "game room", "playground", "swings"]
         this.formatChoice;
         if (format >= 6 && format <= 10){
             this.formatChoice = 6;
@@ -31,6 +32,7 @@ class MapElement{
             this.formatChoice = format;
         }
         this.format = "w-16 h-16 box-border border-2 flex justify-center place-items-center " + this.terrainFormats[this.formatChoice];
+        this.location = this.locations[format];
         this.tributeNames = [];
     }
 
@@ -45,6 +47,10 @@ class MapElement{
             message += this.tributeNames[i] + "\n";
         }
         return message;
+    }
+
+    getLocation(){
+        return this.location;
     }
 
     addTributeName(tributeName){
