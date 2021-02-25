@@ -7,9 +7,9 @@ TODO:
 !allow tributes to die from environmental factors
 !Allow tributes to kill each other
 !Design win screen
-Design nicer map
+!Design nicer map
 Give tribute more complex stats (hunger, thirst, strength, aggressiveness, etc.)
-Allow tributes to more intelligently move and limit how they move
+Allow tributes to more intelligently move and limit how they move (e. g. can't move on water w/o boat)
 Add weapons, supplies, etc on map
 Enable tribute creator
 Make it pretty

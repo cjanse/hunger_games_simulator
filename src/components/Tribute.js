@@ -1,10 +1,13 @@
 
 class Tribute {
-    constructor(name){
+    constructor(name, aggresiveness){
         this.name = name;
         this.row = -1;
         this.column = -1;
+        this.foodMeter = 1.00;
+        this.waterMeter = 1.00
         this.isAlive = true;
+        this.aggresiveness = aggresiveness;
     }
 
     directionMove(range){
@@ -65,6 +68,42 @@ class Tribute {
 
     getIsAlive(){
         return this.isAlive;
+    }
+
+    getFoodMeter(){
+        return this.foodMeter;
+    }
+
+    getWaterMeter(){
+        return this.waterMeter;
+    }
+
+    getAggressiveness(){
+        return this.aggresiveness;
+    }
+
+    adjustFoodMeter(value){
+        if (value + this.foodMeter >= 1.00){
+            this.foodMeter = 1.00;
+        }
+        else if (value + this.foodMeter <= 0.0){
+            this.foodMeter = 0.0;
+        }
+        else {
+            this.foodMeter += value;
+        }
+    }
+
+    adjustWaterMeter(value){
+        if (value + this.waterMeter >= 1.00){
+            this.waterMeter = 1.00;
+        }
+        else if (value + this.waterMeter <= 0.0){
+            this.waterMeter = 0.0;
+        }
+        else {
+            this.waterMeter += value;
+        }
     }
 
     getMapName(){

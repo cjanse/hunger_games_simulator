@@ -18,14 +18,14 @@ class Game {
         this.messages = new Messages();
 
         //making tribute list
-        this.tributes.push(new Tribute("Carter"));
-        this.tributes.push(new Tribute("Skylar"));
-        this.tributes.push(new Tribute("Ashley"));
-        this.tributes.push(new Tribute("Salonee"));
-        this.tributes.push(new Tribute("Christopher"));
-        this.tributes.push(new Tribute("Snowball"));
-        this.tributes.push(new Tribute("Pounce"));
-        this.tributes.push(new Tribute("Bella"));
+        this.tributes.push(new Tribute("Carter",2));
+        this.tributes.push(new Tribute("Skylar",5));
+        this.tributes.push(new Tribute("Ashley",5));
+        this.tributes.push(new Tribute("Salonee",4));
+        this.tributes.push(new Tribute("Christopher",1));
+        this.tributes.push(new Tribute("Snowball",1));
+        this.tributes.push(new Tribute("Pounce",3));
+        this.tributes.push(new Tribute("Bella",5));
 
         this.createMap(0);
         this.placeTributes();
@@ -147,12 +147,20 @@ class Game {
         var j;
         var bestPlacement = [-1,-1];
         var bestDistance = -1;
-        for (i = this.tributes[this.tributeIndex].getRow() - 3; i < this.tributes[this.tributeIndex].getRow() + 3; i++){
-            for (j = this.tributes[this.tributeIndex].getColumn() - 3; j < this.tributes[this.tributeIndex].getRow() + 3; j++){
+        for (i = this.tributes[this.tributeIndex].getRow() - 3; i <= this.tributes[this.tributeIndex].getRow() + 3; i++){
+            for (j = this.tributes[this.tributeIndex].getColumn() - 3; j <= this.tributes[this.tributeIndex].getColumn() + 3; j++){
                 if (i >= 0 && j >= 0 && i < GAME_LENGTH && j < GAME_LENGTH){
-                    if (bestDistance == -1 || bestDistance > Math.sqrt((i-target[0])*(i-target[0]) + (j-target[1])*(j-target[1]))){
-                        bestPlacement = [i,j];
-                        bestDistance = Math.sqrt((i-target[0])*(i-target[0]) + (j-target[1])*(j-target[1]));
+                    if (target[2] == 1){
+                        if (bestDistance == -1 || bestDistance > Math.sqrt((i-target[0])*(i-target[0]) + (j-target[1])*(j-target[1]))){
+                            bestPlacement = [i,j];
+                            bestDistance = Math.sqrt((i-target[0])*(i-target[0]) + (j-target[1])*(j-target[1]));
+                        }
+                    }
+                    else {
+                        if (bestDistance == -1 || bestDistance < Math.sqrt((i-target[0])*(i-target[0]) + (j-target[1])*(j-target[1]))){
+                            bestPlacement = [i,j];
+                            bestDistance = Math.sqrt((i-target[0])*(i-target[0]) + (j-target[1])*(j-target[1]));
+                        }
                     }
                 }
             }
@@ -163,8 +171,11 @@ class Game {
 
     findTarget(){
         if (this.day == 0){
-            if (Math.random() < (2/3)){
-                return [5,5];
+            if (this.aggressiveMoveCalculator() == 1){
+                return [5,5,1];
+            }
+            else if (this.aggressiveMoveCalculator() == -1){
+                return [5,5,-1];
             }
             else {
                 return [-1,-1];
@@ -175,15 +186,89 @@ class Game {
         }
     }
 
+    aggressiveMoveCalculator(){
+        //1 = aggressive move, 0 = not aggressive or inaggressive, -1 = inaggressive move
+        var pureProbability = Math.random();
+        if (this.tributes[this.tributeIndex].getAggressiveness() == 1){
+            if (pureProbability >= 0.95){
+                return 1;
+            }
+            else if (pureProbability >= 0.5){
+                return 0;
+            }
+            else {
+                return -1;
+            }
+        }
+        else if (this.tributes[this.tributeIndex].getAggressiveness() == 2){
+            if (pureProbability >= 0.90){
+                return 1;
+            }
+            else if (pureProbability >= 0.35){
+                return 0;
+            }
+            else {
+                return -1;
+            }
+        }
+        else if (this.tributes[this.tributeIndex].getAggressiveness() == 3){
+            if (pureProbability >= 0.80){
+                return 1;
+            }
+            else if (pureProbability >= 0.20){
+                return 0;
+            }
+            else {
+                return -1;
+            }
+        }
+        else if (this.tributes[this.tributeIndex].getAggressiveness() == 4){
+            if (pureProbability >= 0.65){
+                return 1;
+            }
+            else if (pureProbability >= 0.10){
+                return 0;
+            }
+            else {
+                return -1;
+            }
+        }
+        else {
+            if (pureProbability >= 0.50){
+                return 1;
+            }
+            else if (pureProbability >= 0.05){
+                return 0;
+            }
+            else {
+                return -1;
+            }
+        }
+    }
+
     tributeEnviroSurvival(){
-        if (Math.random() < 0.05){ 
+        if (Math.random() < 0.05 && this.day != 0){ 
             this.tributes[this.tributeIndex].setIsAlive(false);
             this.message ="Tribute: " + this.tributes[this.tributeIndex].getName() + " has tragically died from environmental factors.";
             this.map[this.tributes[this.tributeIndex].getRow()][this.tributes[this.tributeIndex].getColumn()].removeTributeName(this.tributes[this.tributeIndex].getMapName());
             this.tributeIndex++;
         }
+        else if (this.tributes[this.tributeIndex].getFoodMeter() <= 0){
+            this.tributes[this.tributeIndex].setIsAlive(false);
+            this.message ="Tribute: " + this.tributes[this.tributeIndex].getName() + " has tragically died from hunger.";
+            this.map[this.tributes[this.tributeIndex].getRow()][this.tributes[this.tributeIndex].getColumn()].removeTributeName(this.tributes[this.tributeIndex].getMapName());
+            this.tributeIndex++;
+        }
+        else if (this.tributes[this.tributeIndex].getWaterMeter() <= 0){
+            this.tributes[this.tributeIndex].setIsAlive(false);
+            this.message ="Tribute: " + this.tributes[this.tributeIndex].getName() + " has tragically died from dehydration.";
+            this.map[this.tributes[this.tributeIndex].getRow()][this.tributes[this.tributeIndex].getColumn()].removeTributeName(this.tributes[this.tributeIndex].getMapName());
+            this.tributeIndex++;
+        }
         else {
             this.message ="Tribute: " + this.tributes[this.tributeIndex].getName() + " is living the best life.";
+            this.tributes[this.tributeIndex].adjustFoodMeter(-0.21);
+            this.tributes[this.tributeIndex].adjustWaterMeter(-0.34);
             this.inBattle = true;
         }
         this.inSurvival = false;
