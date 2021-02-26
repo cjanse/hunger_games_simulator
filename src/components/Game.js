@@ -18,14 +18,14 @@ class Game {
         this.messages = new Messages();
 
         //making tribute list
-        this.tributes.push(new Tribute("Carter",2));
-        this.tributes.push(new Tribute("Skylar",5));
-        this.tributes.push(new Tribute("Ashley",5));
-        this.tributes.push(new Tribute("Salonee",4));
-        this.tributes.push(new Tribute("Christopher",1));
-        this.tributes.push(new Tribute("Snowball",1));
-        this.tributes.push(new Tribute("Pounce",3));
-        this.tributes.push(new Tribute("Bella",5));
+        this.tributes.push(new Tribute("Carter",2));//2
+        this.tributes.push(new Tribute("Skylar",5));//5
+        this.tributes.push(new Tribute("Ashley",5));//5
+        this.tributes.push(new Tribute("Salonee",4));//4
+        this.tributes.push(new Tribute("Christopher",1));//1
+        this.tributes.push(new Tribute("Snowball",1));//1
+        this.tributes.push(new Tribute("Pounce",3));//3
+        this.tributes.push(new Tribute("Bella",5));//5
 
         this.createMap(0);
         this.placeTributes();
@@ -170,20 +170,62 @@ class Game {
     }
 
     findTarget(){
+        var doesAggressiveMove = this.aggressiveMoveCalculator();
         if (this.day == 0){
-            if (this.aggressiveMoveCalculator() == 1){
+            if (doesAggressiveMove == 1){
                 return [5,5,1];
             }
-            else if (this.aggressiveMoveCalculator() == -1){
+            else if (doesAggressiveMove == -1){
                 return [5,5,-1];
             }
             else {
                 return [-1,-1];
             }
         }
-        else {
-            return [-1,-1];
+        if (doesAggressiveMove == 1){
+            var tributePlaces = this.findAllTributes();
+            if (tributePlaces.length > 0){
+                var target = tributePlaces[Math.floor(Math.random() * Math.floor(tributePlaces.length))];
+                target.push(1);
+                return target;
+            }
         }
+        else if (doesAggressiveMove == -1){
+            var tributePlaces = this.findAllTributes();
+            if (tributePlaces.length > 0){
+                var target = this.findMidPoint(tributePlaces);
+                target.push(-1);
+                return target;
+            }
+        }
+       return [-1,-1];
+    }
+
+    findMidPoint(tributePlaces){
+        var i;
+        var xSum = 0;
+        var ySum = 0;
+        for (i = 0; i < tributePlaces.length; i++){
+            xSum += tributePlaces[i][0];
+            ySum += tributePlaces[i][1];
+        }
+        return [xSum/tributePlaces.length,ySum/tributePlaces.length];
+    }
+
+    findAllTributes(){
+        var tributePlaces = [];
+        var i;
+        var j;
+        for (i = this.tributes[this.tributeIndex].getRow() - 2; i <= this.tributes[this.tributeIndex].getRow() + 2; i++){
+            for (j = this.tributes[this.tributeIndex].getColumn() - 2; j <= this.tributes[this.tributeIndex].getColumn() + 2; j++){
+                if (i >= 0 && j >= 0 && i < GAME_LENGTH && j < GAME_LENGTH){
+                    if (this.map[i][j].findTributeName(this.tributes[this.tributeIndex].getMapName()) != ""){
+                        tributePlaces.push([i,j]);
+                    }
+                }
+            }
+        }
+        return tributePlaces;
     }
 
     aggressiveMoveCalculator(){
@@ -284,7 +326,7 @@ class Game {
     }
 
     tributeBattle(){
-        var otherTributeName = this.map[this.tributes[this.tributeIndex].getRow()][this.tributes[this.tributeIndex].getColumn()].findAnotherTributeName(this.tributes[this.tributeIndex].getMapName());
+        var otherTributeName = this.map[this.tributes[this.tributeIndex].getRow()][this.tributes[this.tributeIndex].getColumn()].findAnotherTributeNameAtSpot(this.tributes[this.tributeIndex].getMapName());
         if (otherTributeName == ""){
             this.message ="Tribute: " + this.tributes[this.tributeIndex].getName() + " does not see anyone to kill.";
             this.inBattle = false;

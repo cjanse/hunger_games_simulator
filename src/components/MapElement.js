@@ -76,8 +76,26 @@ class MapElement{
         //console.log(this.tributeNames);
     }
 
-    findAnotherTributeName(name){
+    findAnotherTributeNameAtSpot(name){
         if (this.tributeNames.length <= 1){
+            return "";
+        }
+        else {
+            var tempTributeNames = [];
+            var i;
+            for (i = 0; i < this.tributeNames.length; i++){
+                if (this.tributeNames[i] != name){
+                    console.log(name + ":" +this.tributeNames[i])
+                    tempTributeNames.push(this.tributeNames[i]);
+                }
+            }
+            var nameIndex = Math.floor(Math.random()*tempTributeNames.length);
+            return tempTributeNames[nameIndex];
+        }
+    }
+
+    findTributeName(name){
+        if (this.tributeNames.length < 1){
             return "";
         }
         else {
