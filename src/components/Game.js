@@ -87,6 +87,31 @@ class Game {
                 }
             }
         }
+
+        this.setAllWaterRefillStations();
+    }
+
+    setAllWaterRefillStations(){
+        var i;
+        var j;
+        for (i = 0; i < GAME_LENGTH; i++){
+            for (j = 0; j < GAME_LENGTH; j++){
+                if (this.map[i][j].getLocation() == "kitchen" || this.map[i][j].getLocation() == "bathroom"){
+                    this.map[i][j].setRefillWaterStation(true);
+                }
+                else if (this.map[i][j].getLocation() == "water"){
+                    var x;
+                    var y;
+                    for (x = i - 1; x <= i + 1; x++){
+                        for (y = j - 1; y <= j + 1; y++){
+                            if (x >= 0 && y >= 0 && x < GAME_LENGTH && y < GAME_LENGTH){
+                                this.map[x][y].setRefillWaterStation(true);
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     placeTributes() {
@@ -137,6 +162,7 @@ class Game {
             this.smartMoveTribute(target);
         }
         console.log("Tribute: " + this.tributes[this.tributeIndex].getMapName() + "\t position: " + this.tributes[this.tributeIndex].getRow() + "," + this.tributes[this.tributeIndex].getColumn());
+        this.searchForWater();
         this.map[this.tributes[this.tributeIndex].getRow()][this.tributes[this.tributeIndex].getColumn()].addTributeName(this.tributes[this.tributeIndex].getMapName());  
         this.message = this.messages.getMoveMessage(this.tributes[this.tributeIndex],this.map);
         this.inSurvival = true;
@@ -180,6 +206,13 @@ class Game {
             }
             else {
                 return [-1,-1];
+            }
+        }
+        if (this.tributes[this.tributeIndex].getWaterMeter() < 0.33){
+            if (this.tributes[this.tributeIndex].getWaterMemory().length > 0){
+                var target = this.findNearestWaterFromMemory();
+                target.push(1);
+                return target;
             }
         }
         if (doesAggressiveMove == 1){
@@ -226,6 +259,36 @@ class Game {
             }
         }
         return tributePlaces;
+    }
+
+    searchForWater(){
+        var i;
+        var j;
+        for (i = this.tributes[this.tributeIndex].getRow() - 2; i <= this.tributes[this.tributeIndex].getRow() + 2; i++){
+            for (j = this.tributes[this.tributeIndex].getColumn() - 2; j <= this.tributes[this.tributeIndex].getColumn() + 2; j++){
+                if (i >= 0 && j >= 0 && i < GAME_LENGTH && j < GAME_LENGTH){
+                    if (this.map[i][j].getRefillWaterStation()){
+                        this.tributes[this.tributeIndex].addWaterMemory([i,j]);
+                    }
+                }
+            }
+        }
+        
+    }
+
+    findNearestWaterFromMemory(){
+        var bestDistance = -1;
+        var target = [-1,-1];
+        var i;
+        var waterMemory = this.tributes[this.tributeIndex].getWaterMemory()
+        for (i = 0; i < this.tributes[this.tributeIndex].getWaterMemory().length; i++){
+            if (bestDistance == -1 || bestDistance > Math.sqrt((waterMemory[i][0]-this.tributes[this.tributeIndex].getRow())*(waterMemory[i][0]-this.tributes[this.tributeIndex].getRow()) + (waterMemory[i][1]-this.tributes[this.tributeIndex].getColumn()) * (waterMemory[i][1]-this.tributes[this.tributeIndex].getColumn()))){
+                bestDistance = Math.sqrt((waterMemory[i][0]-this.tributes[this.tributeIndex].getRow())*(waterMemory[i][0]-this.tributes[this.tributeIndex].getRow()) + (waterMemory[i][1]-this.tributes[this.tributeIndex].getColumn()) * (waterMemory[i][1]-this.tributes[this.tributeIndex].getColumn()));
+                target[0] = waterMemory[i][0];
+                target[1] = waterMemory[i][1];
+            }
+        }
+        return target;
     }
 
     aggressiveMoveCalculator(){
@@ -289,6 +352,9 @@ class Game {
     }
 
     tributeEnviroSurvival(){
+        if (this.map[this.tributes[this.tributeIndex].getRow()][this.tributes[this.tributeIndex].getColumn()].getRefillWaterStation()){
+            this.tributes[this.tributeIndex].adjustWaterMeter(1.0);
+        }
         if (Math.random() < 0.05 && this.day != 0){ 
             this.tributes[this.tributeIndex].setIsAlive(false);
             this.message ="Tribute: " + this.tributes[this.tributeIndex].getName() + " has tragically died from environmental factors.";

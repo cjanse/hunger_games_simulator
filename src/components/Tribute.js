@@ -5,9 +5,10 @@ class Tribute {
         this.row = -1;
         this.column = -1;
         this.foodMeter = 1.00;
-        this.waterMeter = 1.00
+        this.waterMeter = 1.00;
         this.isAlive = true;
         this.aggresiveness = aggresiveness;
+        this.waterMemory = [];
     }
 
     directionMove(range){
@@ -104,6 +105,20 @@ class Tribute {
         else {
             this.waterMeter += value;
         }
+    }
+
+    addWaterMemory(value){
+        var i;
+        for (i = 0; i < this.waterMemory.length; i++){
+            if (value[0] == this.waterMemory[i][0] && value[1] == this.waterMemory[i][1]){
+                return;
+            }
+        }
+        this.waterMemory.push(value);
+    }
+    
+    getWaterMemory(){
+        return this.waterMemory;
     }
 
     getMapName(){

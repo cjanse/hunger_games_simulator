@@ -33,6 +33,7 @@ class MapElement{
         }
         this.format = "w-16 h-16 box-border border-2 flex justify-center place-items-center " + this.terrainFormats[this.formatChoice];
         this.location = this.locations[format];
+        this.refillWaterStation = false;
         this.tributeNames = [];
     }
 
@@ -51,6 +52,14 @@ class MapElement{
 
     getLocation(){
         return this.location;
+    }
+
+    setRefillWaterStation(value){
+        this.refillWaterStation = value;
+    }
+
+    getRefillWaterStation(){
+        return this.refillWaterStation;
     }
 
     addTributeName(tributeName){
