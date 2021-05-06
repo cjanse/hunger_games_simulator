@@ -6,7 +6,13 @@ class Messages {
 
     getMoveMessage(tribute, map){
         var tributePlace = map[tribute.getRow()][tribute.getColumn()];
-        if (tributePlace.getLocation() == "cornucopia"){
+        if (tribute.getWaterMeter() < 0.33){
+            return tribute.getName() + " is very thirsty.";
+        }
+        else if (tribute.getFoodMeter() < 0.2){
+            return tribute.getName() + " is very hungry.";
+        }
+        else if (tributePlace.getLocation() == "cornucopia"){
             return tribute.getName() + " is at the cornucopia.";
         }
         else if (tributePlace.getLocation() == "grass"){

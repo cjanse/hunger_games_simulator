@@ -352,8 +352,15 @@ class Game {
     }
 
     tributeEnviroSurvival(){
+        var foodOrWater = 0;
         if (this.map[this.tributes[this.tributeIndex].getRow()][this.tributes[this.tributeIndex].getColumn()].getRefillWaterStation()){
             this.tributes[this.tributeIndex].adjustWaterMeter(1.0);
+            foodOrWater = 1;
+        }
+        var food = this.map[this.tributes[this.tributeIndex].getRow()][this.tributes[this.tributeIndex].getColumn()].getFood();
+        if (food != null){
+            this.tributes[this.tributeIndex].adjustFoodMeter(food[2]);
+            foodOrWater = 2;
         }
         if (Math.random() < 0.05 && this.day != 0){ 
             this.tributes[this.tributeIndex].setIsAlive(false);
@@ -374,7 +381,16 @@ class Game {
             this.tributeIndex++;
         }
         else {
-            this.message ="Tribute: " + this.tributes[this.tributeIndex].getName() + " is living the best life.";
+            if (foodOrWater == 0) {
+                this.message ="Tribute: " + this.tributes[this.tributeIndex].getName() + " is living the best life.";
+            }
+            else if (foodOrWater == 1) {
+                this.message = this.tributes[this.tributeIndex].getName() + " drank some water.";
+            }
+            else {
+                 this.message = this.tributes[this.tributeIndex].getName() + " ate " + food[1];
+            }
+
             this.tributes[this.tributeIndex].adjustFoodMeter(-0.21);
             this.tributes[this.tributeIndex].adjustWaterMeter(-0.34);
             this.inBattle = true;
