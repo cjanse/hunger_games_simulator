@@ -208,13 +208,20 @@ class Game {
                 return [-1,-1];
             }
         }
-        if (this.tributes[this.tributeIndex].getWaterMeter() < 0.33){
+        if (this.tributes[this.tributeIndex].getWaterMeter() <= 0.33){
             if (this.tributes[this.tributeIndex].getWaterMemory().length > 0){
                 var target = this.findNearestWaterFromMemory();
                 target.push(1);
                 return target;
             }
         }
+        else if (this.tributes) {
+            if (this.tributes[this.tributeIndex].getFoodMeter() <= 0.20){
+                var target = this.findNearestFood();
+                target.push(1);
+                return target;
+            }
+        } 
         if (doesAggressiveMove == 1){
             var tributePlaces = this.findAllTributes();
             if (tributePlaces.length > 0){
@@ -273,7 +280,21 @@ class Game {
                 }
             }
         }
-        
+    }
+
+    findNearestFood(){
+        var i;
+        var j;
+        for (i = this.tributes[this.tributeIndex].getRow() - 2; i <= this.tributes[this.tributeIndex].getRow() + 2; i++){
+            for (j = this.tributes[this.tributeIndex].getColumn() - 2; j <= this.tributes[this.tributeIndex].getColumn() + 2; j++){
+                if (i >= 0 && j >= 0 && i < GAME_LENGTH && j < GAME_LENGTH){
+                    if (this.map[i][j].hasFood()){
+                        return [i,j];
+                    }
+                }
+            }
+        }
+        return [-1,-1];
     }
 
     findNearestWaterFromMemory(){

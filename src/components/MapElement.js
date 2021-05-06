@@ -187,6 +187,10 @@ class MapElement{
         }
     }
 
+    hasFood(){
+        return (this.foods.length != 0);
+    }
+
     getFood(){
         if (this.foods.length == 0){
             return null;
