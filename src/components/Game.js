@@ -399,7 +399,7 @@ class Game {
     }
 
     //Carries out tribute's survival stage of their turn
-    tributeEnviroSurvival(){
+    tributeEnviroSurvival(){    
         var foodOrWater = 0;
         if (this.map[this.tributes[this.tributeIndex].getRow()][this.tributes[this.tributeIndex].getColumn()].getRefillWaterStation()){
             this.tributes[this.tributeIndex].adjustWaterMeter(1.0);
@@ -461,11 +461,11 @@ class Game {
         var weapon = this.map[this.tributes[this.tributeIndex].getRow()][this.tributes[this.tributeIndex].getColumn()].getWeapon();
         var otherTributeName = this.map[this.tributes[this.tributeIndex].getRow()][this.tributes[this.tributeIndex].getColumn()].findAnotherTributeNameAtSpot(this.tributes[this.tributeIndex].getMapName());
         if (weapon != null){
-            this.message = this.tributes[this.tributeIndex].getName() + " found " + weapon[1];
+            this.message = this.messages.getWeaponFoundMessage(this.tributes[this.tributeIndex],weapon);
             this.tributes[this.tributeIndex].addWeapon(weapon);
         }
         else if (otherTributeName == ""){
-            this.message = this.tributes[this.tributeIndex].getName() + " does not see anyone to kill."
+            this.message = this.messages.getGeneralBattleMessage(this.tributes[this.tributeIndex]);
         }
         
         if (otherTributeName != "") {
@@ -475,12 +475,12 @@ class Game {
             if (Math.random() + tributeWeapon[0] > Math.random() + otherTributeWeapon[0]){
                 otherTribute.setIsAlive(false);
                 this.map[this.tributes[this.tributeIndex].getRow()][this.tributes[this.tributeIndex].getColumn()].removeTributeName(otherTribute.getMapName());
-                this.message = this.tributes[this.tributeIndex].getName() + " killed " + otherTribute.getName() + " with " + tributeWeapon[1];
+                this.message = this.messages.getKilledMessage(this.tributes[this.tributeIndex],otherTribute);
             }
             else {
                 this.tributes[this.tributeIndex].setIsAlive(false);
                 this.map[this.tributes[this.tributeIndex].getRow()][this.tributes[this.tributeIndex].getColumn()].removeTributeName(this.tributes[this.tributeIndex].getMapName());
-                this.message = otherTribute.getName() + " killed " + this.tributes[this.tributeIndex].getName() + " with " + otherTributeWeapon[1];
+                this.message = this.messages.getKilledMessage(otherTribute, this.tributes[this.tributeIndex]);
             }
         }
         this.inBattle = false;
@@ -527,7 +527,7 @@ class Game {
             this.tributeIndex = 0;
             this.removeDeadTributes();
             this.day++;
-            this.message = "Finished day " + this.day;
+            this.message = this.messages.getEndOfDayMessage(this.day);
         }
     }
 

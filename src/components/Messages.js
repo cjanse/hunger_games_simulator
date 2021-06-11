@@ -91,7 +91,7 @@ class Messages {
 
     /**
     * generates a random message if nothing significant
-    * happens in the a tribute's survival turn
+    * happens in the tribute's survival turn
     */
     getGeneralEnviroMessage(tribute){
         return tribute.getName() + " is breathing."
@@ -110,6 +110,37 @@ class Messages {
     */
     getEatingMessage(tribute, food){
         return tribute.getName() + " ate " + food[1] + ".";
+    }
+
+    /**
+    *  generates message for finding a weapon
+    */
+    getWeaponFoundMessage(tribute, weapon){
+        return tribute.getName() + " found " + weapon[1] + ".";
+    }
+
+    /**
+    * generates a random message if nothing significant
+    * happens in a the tribute's battle turn
+    */
+    getGeneralBattleMessage(tribute){
+        var weapon = tribute.getBestWeapon();
+        return tribute.getName() + " looks at " + weapon[1] + ".";
+    }
+
+    /**
+    * generates a message to say who killed who
+    */
+    getKilledMessage(winner, loser){
+        var winnerWeapon = winner.getBestWeapon();
+        return winner.getName() + " killed " + loser.getName() + " with " + winnerWeapon[1] + ".";
+    }
+
+    /**
+    * generates an end of day message
+    */
+    getEndOfDayMessage(day){
+        return "Finished day " + day;
     }
 }
 export default Messages;
