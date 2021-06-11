@@ -1,9 +1,12 @@
 {
   "ExpandedNodes": [
     "",
+    "\\public",
+    "\\requirements",
     "\\src",
-    "\\src\\components"
+    "\\src\\components",
+    "\\src\\pages"
   ],
-  "SelectedNode": "\\src\\components\\MapElement.js",
+  "SelectedNode": "\\src\\components\\Game.js",
   "PreviewInSolutionExplorer": false
 }

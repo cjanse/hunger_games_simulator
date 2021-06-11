@@ -1,6 +1,8 @@
 import React from "react"
 import TributeCreator from "./TributeCreator"
-
+/**
+* Displays main menu and is the first screen user interacts with
+*/
 const MainMenu = (props) => {
   
   const [creatingTributes, setCreatingTributes] = React.useState(false);

@@ -1,3 +1,4 @@
+//End Game screen that announces who the winner is and allows for a chance to replay simulation
 const EndGame = (props) => {
 
     return(

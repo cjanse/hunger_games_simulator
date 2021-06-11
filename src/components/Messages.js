@@ -1,9 +1,24 @@
 import Tribute from "./Tribute"
 import MapElement from "./MapElement"
 
+/**
+* This class contains all the messages that are printed during the game.
+*/
 class Messages {
     constructor(){}
 
+    /**
+    * This function randomly picks a message.
+    */
+    randomSelection(messages){
+        return messages[Math.floor(Math.random()*message.length)];
+    }
+
+    /**
+    * This function creates the message for whenever a tribute moves. It states if the
+    * tribute is very thirsty or hungry. If the tribute is not thirsty or hungry, it 
+    * states what biome they are on.
+    */
     getMoveMessage(tribute, map){
         var tributePlace = map[tribute.getRow()][tribute.getColumn()];
         if (tribute.getWaterMeter() < 0.33){
@@ -51,6 +66,50 @@ class Messages {
         else {
             return tribute.getName() + " is by the swings.";
         }
+    }
+
+    /**
+    * creates message for death by hunger
+    */
+    getHungerDeathMessage(tribute){
+        return tribute.getName() + " has tragically died from hunger.";
+    }
+
+    /**
+    * creates message for death by dehydration
+    */
+    getDehydrationDeathMessage(tribute){
+        return tribute.getName() + " has tragically died from dehydration.";
+    }
+
+    /**
+    * creates a death message for random environmental factors
+    */
+    getDeathEnviroMessage(tribute){
+        return tribute.getName() + " has died from nature."
+    }
+
+    /**
+    * generates a random message if nothing significant
+    * happens in the a tribute's survival turn
+    */
+    getGeneralEnviroMessage(tribute){
+        return tribute.getName() + " is breathing."
+    }
+
+    /**
+    * generates message for tribute drinking water
+    */
+    getDrinkingWaterMessage(tribute, map){
+        var tributePlace = map[tribute.getRow()][tribute.getColumn()];
+        return tribute.getName() + " is drinking water at " + tributePlace.getLocation() + ".";
+    }
+
+    /**
+    * generates message for eating food
+    */
+    getEatingMessage(tribute, food){
+        return tribute.getName() + " ate " + food[1] + ".";
     }
 }
 export default Messages;

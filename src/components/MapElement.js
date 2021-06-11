@@ -25,7 +25,9 @@ class MapElement{
         this.survivalFoodOptions = [[1,"berries",0.15],[1,"egg",0.2],[1,"rabbit",0.5],[1,"mouse",0.3],[1,"turkey",0.5],[1,"deer",0.8]];
         this.seaOptions = [[2,"fish", 0.4], [2,"shark",0.5], [2,"calamari",0.4]];
         this.specialOptions = [[3,"corn chowder stew",0.6], [3,"tiramisu",0.2], [3,"ham and cheese sandwich",0.4], [3,"a five course meal",1.0]];
+        this.weaponOptions = [[0.1,"dagger"],[0.3,"axe"],[0.5,"sword"]];
         this.foods = [];
+        this.weapons = [];
         this.formatChoice;
         if (format >= 6 && format <= 10){
             this.formatChoice = 6;
@@ -43,10 +45,12 @@ class MapElement{
         this.tributeNames = [];
     }
 
+    //returns format of map element 
     getFormat(){
         return this.format;
     }
 
+    //returns message on map element (usually just tribute's name(s))
     getMessage(){
         var i;
         var message = "";
@@ -56,22 +60,27 @@ class MapElement{
         return message;
     }
 
+    //returns location name (name of biome essentially)
     getLocation(){
         return this.location;
     }
 
+    //Determines whether this is a spot where tributes can get water
     setRefillWaterStation(value){
         this.refillWaterStation = value;
     }
 
+    //returns whether this is a spot where tributes can get water
     getRefillWaterStation(){
         return this.refillWaterStation;
     }
 
+    //adds tribute's name to map element
     addTributeName(tributeName){
         this.tributeNames.push(tributeName);
     }
 
+    //removes tribute's name to map element
     removeTributeName(tributeName){
         //console.log("removeTributeName");
         //console.log(this.tributeNames);
@@ -91,6 +100,7 @@ class MapElement{
         //console.log(this.tributeNames);
     }
 
+    //finds another tribute at random at spot
     findAnotherTributeNameAtSpot(name){
         if (this.tributeNames.length <= 1){
             return "";
@@ -109,6 +119,7 @@ class MapElement{
         }
     }
 
+    //finds a specific tribute at spot
     findTributeName(name){
         if (this.tributeNames.length < 1){
             return "";
@@ -127,10 +138,12 @@ class MapElement{
         }
     }
 
+    //set message at spot
     setMessage(message){
         this.message = message;
     }
 
+    //creates item (weapon and food) for spot
     createItems(format){
         if (format == 0){
             var foodNumber = Math.random() * 10;
@@ -147,11 +160,19 @@ class MapElement{
                     this.foods.push(this.specialOptions[Math.floor(Math.random() * this.specialOptions.length)]);
                 }
             }
+            var weaponNumber = Math.random() *10;
+            for (i = 0; i < weaponNumber; i++){
+                this.weapons.push(this.weaponOptions[Math.floor(Math.random() * this.weaponOptions.length)]);
+            }
         }
         if (format == 1 || format == 4){
             var foodNumber = (Math.random() - 0.4) * 2;
             for (i = 0; i < foodNumber; i++){
                 this.foods.push(this.survivalFoodOptions[Math.floor(Math.random() * this.survivalFoodOptions.length)]);
+            }
+            var weaponNumber = (Math.random() - 0.8);
+            for (i = 0; i < weaponNumber; i++){
+                this.weapons.push(this.weaponOptions[Math.floor(Math.random() * this.weaponOptions.length)]);
             }
         }
         else if (format == 3 || format == 5){
@@ -159,17 +180,29 @@ class MapElement{
             for (i = 0; i < foodNumber; i++){
                 this.foods.push(this.survivalFoodOptions[Math.floor(Math.random() * this.survivalFoodOptions.length)]);
             }
+            var weaponNumber = (Math.random() - 0.8);
+            for (i = 0; i < weaponNumber; i++){
+                this.weapons.push(this.weaponOptions[Math.floor(Math.random() * this.weaponOptions.length)]);
+            }
         }
         else if (format == 2){
             var foodNumber = (Math.random() * 2);
             for (i = 0; i < foodNumber; i++){
                 this.foods.push(this.seaOptions[Math.floor(Math.random() * this.seaOptions.length)]);
             }
+            var weaponNumber = (Math.random() - 0.8);
+            for (i = 0; i < weaponNumber; i++){
+                this.weapons.push(this.weaponOptions[Math.floor(Math.random() * this.weaponOptions.length)]);
+            }
         }
         else if (format >= 7 && format <= 12){
             var foodNumber = (Math.random() - 0.4) * 2;
             for (i = 0; i < foodNumber; i++){
                 this.foods.push(this.snackFoodOptions[Math.floor(Math.random() * this.snackFoodOptions.length)]);
+            }
+            var weaponNumber = (Math.random() - 0.4) * 2;
+            for (i = 0; i < weaponNumber; i++){
+                this.weapons.push(this.weaponOptions[Math.floor(Math.random() * this.weaponOptions.length)]);
             }
         }
         else {
@@ -185,12 +218,18 @@ class MapElement{
                 }
             }
         }
+        var weaponNumber = (Math.random() - 0.8);
+            for (i = 0; i < weaponNumber; i++){
+                this.weapons.push(this.weaponOptions[Math.floor(Math.random() * this.weaponOptions.length)]);
+            }
     }
 
+    //Determines if there is food at spot
     hasFood(){
         return (this.foods.length != 0);
     }
 
+    //Returns a food item at spot
     getFood(){
         if (this.foods.length == 0){
             return null;
@@ -198,6 +237,18 @@ class MapElement{
         else {
             var temp = this.foods[0];
             this.foods.shift();
+            return temp;
+        }
+    }
+
+    //Returns weapon at spot (if there is one)
+    getWeapon(){
+        if (this.weapons.length == 0){
+            return null;
+        }
+        else {
+            var temp = this.weapons[0];
+            this.weapons.shift();
             return temp;
         }
     }

@@ -1,3 +1,7 @@
+/**
+* This class is excatly the same as MapScreen and allows for changes to be made onto the map.
+* 
+*/
 const OtherMapScreen = (props) => {
     return (
         <>

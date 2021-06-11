@@ -1,4 +1,7 @@
 
+/**
+* This class groups all of the characteristics of one tribute together.
+*/
 class Tribute {
     constructor(name, aggresiveness){
         this.name = name;
@@ -9,8 +12,11 @@ class Tribute {
         this.isAlive = true;
         this.aggresiveness = aggresiveness;
         this.waterMemory = [];
+        this.weaponInventory = [[0,"hands"]];
     }
 
+    //Determines if tribute is moving forwards, backwards, or not at all
+    //for either row or column.
     directionMove(range){
         if (range == 1){
             if (Math.random() > 0.5){
@@ -43,46 +49,57 @@ class Tribute {
         }
     }
 
+    //changes row value for tribute as desired
     setRow(value){
         this.row = value;
     }
 
+    //changes column value for tribute as desired
     setColumn(value){
         this.column = value;
     }
 
+    //returns row position of tribute
     getRow(){
         return this.row;
     }
 
+    //returns column position of tribute
     getColumn(){
         return this.column;
     }
 
+    //return tribute's name
     getName(){
         return this.name;
     }
 
+    //changes living status for tribute as desired
     setIsAlive(value){
         this.isAlive = value;
     }
 
+    //returns living status for tribute
     getIsAlive(){
         return this.isAlive;
     }
 
+    //returns tribute's food meter
     getFoodMeter(){
         return this.foodMeter;
     }
 
+    //returns tribute's water meter
     getWaterMeter(){
         return this.waterMeter;
     }
 
+    //returns tribute's aggresiveness ranking
     getAggressiveness(){
         return this.aggresiveness;
     }
 
+    //changes tribute's food meter without going over 1 or below 0
     adjustFoodMeter(value){
         if (value + this.foodMeter >= 1.00){
             this.foodMeter = 1.00;
@@ -95,6 +112,7 @@ class Tribute {
         }
     }
 
+    //changes tribute's water meter without going over 1 or below 0
     adjustWaterMeter(value){
         if (value + this.waterMeter >= 1.00){
             this.waterMeter = 1.00;
@@ -107,6 +125,7 @@ class Tribute {
         }
     }
 
+    //allows user to remember a certain spot as a place to get more water
     addWaterMemory(value){
         var i;
         for (i = 0; i < this.waterMemory.length; i++){
@@ -117,6 +136,7 @@ class Tribute {
         this.waterMemory.push(value);
     }
     
+    //returns tribute's water memory
     getWaterMemory(){
         return this.waterMemory;
     }
@@ -130,6 +150,7 @@ class Tribute {
         }
     }
    
+    //Moves tributes in a random direction without going out of bounds
     move(){
         if (this.row == 0){
             this.row += this.directionMove(1);
@@ -149,6 +170,23 @@ class Tribute {
         else {
             this.column += this.directionMove(0);
         }
+    }
+
+    //adds weapon to tribute's weapon inventory
+    addWeapon(weapon){
+        this.weaponInventory.push(weapon);
+    }
+
+    //finds and returns tribute's strongest weapon
+    getBestWeapon(){
+        var bestWeapon = this.weaponInventory[0];
+        var i;
+        for (i = 0; i < this.weaponInventory.length; i++){
+            if (bestWeapon[0] < this.weaponInventory[i][0]){
+                bestWeapon = this.weaponInventory[i];
+            }
+        }
+        return bestWeapon;
     }
 
 }

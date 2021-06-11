@@ -2,7 +2,9 @@ import MapScreen from "./MapScreen"
 import OtherMapScreen from "./OtherMapScreen"
 import React from "react"
 import EndGame from "./EndGame"
-
+/**
+* Class that displays the game screen including the map
+*/
 const GameScreen = (props) => {
 
     const [hasWon, sethasWon] = React.useState(false);

@@ -3,7 +3,9 @@ import Tribute from "./Tribute"
 import Messages from "./Messages"
 
 const GAME_LENGTH = 11;
-
+/**
+* Class that controls main functionality of the game
+*/
 class Game {
 
     constructor(){
@@ -32,7 +34,7 @@ class Game {
         
     }
 
-
+    //Creates map based upon user choice
     createMap(mapChoice) {
         var i;
         var j;
@@ -86,11 +88,22 @@ class Game {
                     this.map[i][j] = new MapElement(4);
                 }
             }
+            this.map[1][9] = new MapElement(2);
+
+            //adds snow in corner
+            this.map[10][10] = new MapElement(5);
+            this.map[9][10] = new MapElement(5);
+            this.map[10][9] = new MapElement(5);
+            this.map[8][10] = new MapElement(5);
+            this.map[10][8] = new MapElement(5);
+            this.map[9][9] = new MapElement(5);
         }
 
         this.setAllWaterRefillStations();
     }
 
+    //Determines where all the places that tributes can get water based
+    //on created map elements
     setAllWaterRefillStations(){
         var i;
         var j;
@@ -114,6 +127,7 @@ class Game {
         }
     }
 
+    //Places tributes on the created map
     placeTributes() {
         //establishes tribute's initial positions
         var i;
@@ -149,6 +163,8 @@ class Game {
         }
     }
 
+    //Moves tributes either randomly or intelligently based upon
+    //determined factors in the game
     moveTribute() {
         this.map[this.tributes[this.tributeIndex].getRow()][this.tributes[this.tributeIndex].getColumn()].removeTributeName(this.tributes[this.tributeIndex].getMapName());
         console.log("Tribute: " + this.tributes[this.tributeIndex].getMapName() + "\t position: " + this.tributes[this.tributeIndex].getRow() + "," + this.tributes[this.tributeIndex].getColumn());
@@ -168,6 +184,7 @@ class Game {
         this.inSurvival = true;
     }
 
+    //Moves tribute towards a specific target without exceeding a tribute's range
     smartMoveTribute(target){
         var i;
         var j;
@@ -195,6 +212,8 @@ class Game {
         this.tributes[this.tributeIndex].setColumn(bestPlacement[1]);
     }
 
+    //Determines where the tribute wants to go 
+    //based on determined factors
     findTarget(){
         var doesAggressiveMove = this.aggressiveMoveCalculator();
         if (this.day == 0){
@@ -238,9 +257,10 @@ class Game {
                 return target;
             }
         }
-       return [-1,-1];
+        return [-1,-1];
     }
 
+    //Finds the midpoint of all tribute's target places
     findMidPoint(tributePlaces){
         var i;
         var xSum = 0;
@@ -252,6 +272,7 @@ class Game {
         return [xSum/tributePlaces.length,ySum/tributePlaces.length];
     }
 
+    //Finds all the tributes within the "eye sight" of a tribute
     findAllTributes(){
         var tributePlaces = [];
         var i;
@@ -268,6 +289,7 @@ class Game {
         return tributePlaces;
     }
 
+    //Finds all water refill spots within the "eye sight" of a tribute
     searchForWater(){
         var i;
         var j;
@@ -282,6 +304,7 @@ class Game {
         }
     }
 
+    //Finds the nearest food spot within the "eye sight" of a tribute
     findNearestFood(){
         var i;
         var j;
@@ -297,6 +320,7 @@ class Game {
         return [-1,-1];
     }
 
+    //Finds the nearest water refill spot from tribute memory
     findNearestWaterFromMemory(){
         var bestDistance = -1;
         var target = [-1,-1];
@@ -312,6 +336,8 @@ class Game {
         return target;
     }
 
+    //Determines whether or not tribute will be aggressive with probabilities
+    //based on tribute's aggressive ranking
     aggressiveMoveCalculator(){
         //1 = aggressive move, 0 = not aggressive or inaggressive, -1 = inaggressive move
         var pureProbability = Math.random();
@@ -372,6 +398,7 @@ class Game {
         }
     }
 
+    //Carries out tribute's survival stage of their turn
     tributeEnviroSurvival(){
         var foodOrWater = 0;
         if (this.map[this.tributes[this.tributeIndex].getRow()][this.tributes[this.tributeIndex].getColumn()].getRefillWaterStation()){
@@ -385,31 +412,31 @@ class Game {
         }
         if (Math.random() < 0.05 && this.day != 0){ 
             this.tributes[this.tributeIndex].setIsAlive(false);
-            this.message ="Tribute: " + this.tributes[this.tributeIndex].getName() + " has tragically died from environmental factors.";
+            this.message = this.messages.getDeathEnviroMessage(this.tributes[this.tributeIndex]);
             this.map[this.tributes[this.tributeIndex].getRow()][this.tributes[this.tributeIndex].getColumn()].removeTributeName(this.tributes[this.tributeIndex].getMapName());
             this.tributeIndex++;
         }
         else if (this.tributes[this.tributeIndex].getFoodMeter() <= 0){
             this.tributes[this.tributeIndex].setIsAlive(false);
-            this.message ="Tribute: " + this.tributes[this.tributeIndex].getName() + " has tragically died from hunger.";
+            this.message = this.messages.getHungerDeathMessage(this.tributes[this.tributeIndex]);
             this.map[this.tributes[this.tributeIndex].getRow()][this.tributes[this.tributeIndex].getColumn()].removeTributeName(this.tributes[this.tributeIndex].getMapName());
             this.tributeIndex++;
         }
         else if (this.tributes[this.tributeIndex].getWaterMeter() <= 0){
             this.tributes[this.tributeIndex].setIsAlive(false);
-            this.message ="Tribute: " + this.tributes[this.tributeIndex].getName() + " has tragically died from dehydration.";
+            this.message = this.messages.getDehydrationDeathMessage(this.tributes[this.tributeIndex]);
             this.map[this.tributes[this.tributeIndex].getRow()][this.tributes[this.tributeIndex].getColumn()].removeTributeName(this.tributes[this.tributeIndex].getMapName());
             this.tributeIndex++;
         }
         else {
             if (foodOrWater == 0) {
-                this.message ="Tribute: " + this.tributes[this.tributeIndex].getName() + " is living the best life.";
+                this.message = this.messages.getGeneralEnviroMessage(this.tributes[this.tributeIndex]);
             }
             else if (foodOrWater == 1) {
-                this.message = this.tributes[this.tributeIndex].getName() + " drank some water.";
+                this.message = this.messages.getDrinkingWaterMessage(this.tributes[this.tributeIndex],this.map);
             }
             else {
-                 this.message = this.tributes[this.tributeIndex].getName() + " ate " + food[1];
+                 this.message = this.messages.getEatingMessage(this.tributes[this.tributeIndex], food);
             }
 
             this.tributes[this.tributeIndex].adjustFoodMeter(-0.21);
@@ -419,6 +446,7 @@ class Game {
         this.inSurvival = false;
     }
 
+    //finds tribute based on their name
     findTribute(name){
         var i;
         for (i = 0; i < this.tributes.length; i++){
@@ -428,30 +456,38 @@ class Game {
         }
     }
 
+    //Carries out tribute's battle stage of turn
     tributeBattle(){
+        var weapon = this.map[this.tributes[this.tributeIndex].getRow()][this.tributes[this.tributeIndex].getColumn()].getWeapon();
         var otherTributeName = this.map[this.tributes[this.tributeIndex].getRow()][this.tributes[this.tributeIndex].getColumn()].findAnotherTributeNameAtSpot(this.tributes[this.tributeIndex].getMapName());
-        if (otherTributeName == ""){
-            this.message ="Tribute: " + this.tributes[this.tributeIndex].getName() + " does not see anyone to kill.";
-            this.inBattle = false;
-            return;
+        if (weapon != null){
+            this.message = this.tributes[this.tributeIndex].getName() + " found " + weapon[1];
+            this.tributes[this.tributeIndex].addWeapon(weapon);
         }
-        else {
+        else if (otherTributeName == ""){
+            this.message = this.tributes[this.tributeIndex].getName() + " does not see anyone to kill."
+        }
+        
+        if (otherTributeName != "") {
             var otherTribute = this.findTribute(otherTributeName);
-            if (Math.random() > 0.5){
+            var otherTributeWeapon = otherTribute.getBestWeapon();
+            var tributeWeapon = this.tributes[this.tributeIndex].getBestWeapon();
+            if (Math.random() + tributeWeapon[0] > Math.random() + otherTributeWeapon[0]){
                 otherTribute.setIsAlive(false);
                 this.map[this.tributes[this.tributeIndex].getRow()][this.tributes[this.tributeIndex].getColumn()].removeTributeName(otherTribute.getMapName());
-                this.message = this.tributes[this.tributeIndex].getName() + " killed " + otherTribute.getName();
+                this.message = this.tributes[this.tributeIndex].getName() + " killed " + otherTribute.getName() + " with " + tributeWeapon[1];
             }
             else {
                 this.tributes[this.tributeIndex].setIsAlive(false);
                 this.map[this.tributes[this.tributeIndex].getRow()][this.tributes[this.tributeIndex].getColumn()].removeTributeName(this.tributes[this.tributeIndex].getMapName());
-                this.message = otherTribute.getName() + " killed " + this.tributes[this.tributeIndex].getName();
+                this.message = otherTribute.getName() + " killed " + this.tributes[this.tributeIndex].getName() + " with " + otherTributeWeapon[1];
             }
         }
         this.inBattle = false;
 
     }
 
+    //finds all dead tributes and removes them from the game
     removeDeadTributes() {
         var i;
         var tempTribute;
@@ -466,7 +502,8 @@ class Game {
             }
         }
     }
-
+    
+    //main function that controls the flow of the game
     continueGame() {
         if (this.tributeIndex < this.tributes.length){
             if (this.tributes[this.tributeIndex].getIsAlive() == false){
@@ -494,19 +531,22 @@ class Game {
         }
     }
 
+    //returns a specific map element based on a certain row and column
     getMapElement(row, column){
         return this.map[row][column];
     }
 
+    //returns message
     getMessage(){
         return this.message;
     }
 
+    //returns length of tribute
     getTributesLength(){
         return this.tributes.length;
     }
 
-    
+    //returns a game over message once there is <= 1 tributes in the game
     getGameOverMessage(){
         var gameOverMessage = "";
         if (this.tributes.length == 1){

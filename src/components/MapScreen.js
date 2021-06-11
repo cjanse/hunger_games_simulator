@@ -1,3 +1,4 @@
+//Displays map with tributes on it
 const MapScreen = (props) => {
     return (
         <>

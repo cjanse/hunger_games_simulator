@@ -2,7 +2,9 @@ import React from "react"
 import MainMenu from "../components/MainMenu"
 import GameScreen from "../components/GameScreen"
 import Game from '../components/Game'
-
+/**
+* Class that is the base for all user interface classes...
+*/
 export default function Home() {
 
   const [simulating, setSimulating] = React.useState(false);

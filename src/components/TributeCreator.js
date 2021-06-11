@@ -1,6 +1,9 @@
 import MainMenu from "./MainMenu"
 import React from "react"
 
+/**
+* This class allows user to create tributes to participate in the game.
+*/
 const TributeCreator = (props) => {
 
     return (
