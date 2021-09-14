@@ -28,6 +28,7 @@ class Game {
         this.tributes.push(new Tribute("Snowball",1));//1
         this.tributes.push(new Tribute("Pounce",3));//3
         this.tributes.push(new Tribute("Bella",5));//5
+        this.tributes.push(new Tribute("Samara",4));
 
         this.createMap(0);
         this.placeTributes();
