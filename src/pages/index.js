@@ -8,6 +8,12 @@ import Game from '../components/Game'
 export default function Home() {
 
   const [simulating, setSimulating] = React.useState(false);
+  const [tributeList, setTributeList] = React.useState([]);
+
+  function addTribute(value){
+        tributeList.push(value)
+  }
+
   function start(){
     setSimulating(true);
   }

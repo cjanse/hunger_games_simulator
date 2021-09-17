@@ -215,8 +215,20 @@ class Game {
 
     //Determines where the tribute wants to go 
     //based on determined factors
+    // returns a target with [x coordinate, y coordinate, whether to go towards target or away (-1 for away, 1 for torwards)]
     findTarget(){
         var doesAggressiveMove = this.aggressiveMoveCalculator();
+        if (this.tributes.length == 2) {
+            var tributePlaces = this.findAllTributes();
+            if (tributePlaces.length == 0){
+                return [5,5,1]
+            }
+            else{
+                target = tributePlaces[0]
+                target.push(1)
+                return target
+            }
+        }
         if (this.day == 0){
             if (doesAggressiveMove == 1){
                 return [5,5,1];

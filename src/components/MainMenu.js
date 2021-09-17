@@ -13,6 +13,8 @@ const MainMenu = (props) => {
     setCreatingTributes(false);
   }
 
+  
+
     return (
       <>
       <div>
